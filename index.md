@@ -122,5 +122,5 @@ shinyServer(
 ## ShinyApps.io deployment
 
 1. Anyone can run the app at: 
-https://steniofernandes.shinyapps.io/DDP_HistApp/
+https://steniofernandes.shinyapps.io/HistApp/
 
