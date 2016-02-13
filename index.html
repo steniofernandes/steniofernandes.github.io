@@ -55,8 +55,8 @@
 <li>It randomly generates 5000 samples from a Normal Distribution</li>
 <li>The paremeters of the distribution are unknown to the user</li>
 <li>It plots a Histogram from the Sample Data</li>
-<li>It plots requests the input of the user to find the best curve that fits the Histogram</li>
-<li>It reacts to user input by drawing the density lines over the histogram</li>
+<li>It requests the input of the user to find the best curve to fit the Histogram</li>
+<li>It reacts to the user input by redrawing the density lines over the histogram</li>
 </ol>
 
   </article>
@@ -71,10 +71,10 @@
     <p>Details of the Implementation</p>
 
 <ol>
-<li>Input parameters at UI are: mean, sd, and number of bins for the histogram</li>
-<li> Basically, the user will try to guess the correct parameters that generate the histogram</li>
+<li>Input parameters at the UI are: mean and standard deviation</li>
+<li>Basically, the user will try to guess the correct parameters that generate the histogram</li>
 <li>User will adjust the input values as the density lines are redrawn on top of the histogram plot</li>
-<li>The code fixes the number of random samples to 5000</li>
+<li>The code sets the number of random samples to 5000</li>
 <li>The mean parameter for the Normal distribution is between -10 and 10</li>
 <li>The standard deviation parameter for the Normal distribution is between 0.5 and 5</li>
 <li>User&#39;s choice will be limited within the above range</li>
@@ -95,14 +95,19 @@
 
 <pre><code class="r">library(shiny)
 shinyUI(pageWithSidebar(
-  headerPanel(&quot;Guess the parameters for a Normal PDF for best fit&quot;), 
+  headerPanel(&quot;Best fit for a Normal Distribution&quot;),
   sidebarPanel(
-    sliderInput(&#39;nbreaks&#39;, &#39;Number of Breaks in the Histogram&#39;, 10, min = 10, max = 100, step = 10),
     numericInput(&#39;meanvalue&#39;, &#39;Sample Mean&#39;, 0, min = -10, max = 10, step = 0.5),
     numericInput(&#39;sdvalue&#39;, &#39;Sample Standard Deviation&#39;, 1, min = 0.5, max = 5, step = 0.5)
               ),
   mainPanel(
-    h3(&#39;Plot&#39;),
+    h3(&quot;This is a histogram of 5000 random samples from a Normal Distribution&quot;),
+    h4(&quot;Your task is to guess its mean and standard deviation&quot;),
+    h4(&quot;As you change the input parameters:&quot;),
+    h5(&quot;1. The density will be recalculated&quot;),
+    h5(&quot;2. New line curve will appear in the panel&quot;),
+    h4(&quot;When you feel that you reached the best fit, 
+       you have the approximated mean and sd&quot;),
     plotOutput(&#39;newHist&#39;)
   )
 ))
@@ -112,7 +117,7 @@ shinyUI(pageWithSidebar(
 
 <div class="row">
 <div class="col-sm-12">
-<h1>Guess the parameters for a Normal PDF for best fit</h1>
+<h1>Best fit for a Normal Distribution</h1>
 </div>
 
 <p></div></p>
@@ -120,11 +125,6 @@ shinyUI(pageWithSidebar(
 <div class="row">
 <div class="col-sm-4">
 <form class="well">
-<div class="form-group shiny-input-container">
-<label class="control-label" for="nbreaks">Number of Breaks in the Histogram</label>
-<input class="js-range-slider" id="nbreaks" data-min="10" data-max="100" data-from="10" data-step="10" data-grid="true" data-grid-num="9" data-grid-snap="false" data-prettify-separator="," data-keyboard="true" data-keyboard-step="11.1111111111111" data-drag-interval="true" data-data-type="number"/>
-</div>
-
 <div class="form-group shiny-input-container">
 <label for="meanvalue">Sample Mean</label>
 <input id="meanvalue" type="number" class="form-control" value="0" min="-10" max="10" step="0.5"/>
@@ -139,7 +139,13 @@ shinyUI(pageWithSidebar(
 </div></p>
 
 <div class="col-sm-8">
-<h3>Plot</h3>
+<h3>This is a histogram of 5000 random samples from a Normal Distribution</h3>
+<h4>Your task is to guess its mean and standard deviation</h4>
+<h4>As you change the input parameters:</h4>
+<h5>1. The density will be recalculated</h5>
+<h5>2. New line curve will appear in the panel</h5>
+<h4>When you feel that you reached the best fit, 
+       you have the approximated mean and sd</h4>
 <div id="newHist" class="shiny-plot-output" style="width: 100% ; height: 400px"></div>
 </div>
 
@@ -159,16 +165,16 @@ shinyUI(pageWithSidebar(
 <li>Simple server.R code</li>
 </ol>
 
-<pre><code class="r"> x &lt;- rnorm(5000, mean = runif(1, -10, 10), sd = runif(1, 0.5, 5))
- library(shiny)
- shinyServer(
+<pre><code class="r">x &lt;- rnorm(5000, mean = runif(1, -10, 10), sd = runif(1, 0.5, 5))
+library(shiny)
+shinyServer(
   function(input, output) {
     output$newHist &lt;- renderPlot(
       {
         # Generate a Random Normal PDF with the input parameters from UI 
         x2 &lt;- rnorm(5000, mean = input$meanvalue, sd = input$sdvalue)
-        hist(x, breaks = input$nbreaks, xlab=&#39;Random Sample- Normal PDF&#39;, col=&#39;lightblue&#39;, 
-             main=&#39;Histogram&#39;, probability = TRUE)
+        hist(x, breaks = 100, xlab=&#39;Random Sample- Normal PDF&#39;, 
+             col=&#39;lightblue&#39;,main=&#39;Histogram&#39;, probability = TRUE)
         lines(density(x2), lty=&quot;dotted&quot;, col=&quot;red&quot;, lwd=2)
               } #end code inside renderplot
   ) #end cal to renderplot
@@ -190,13 +196,6 @@ shinyUI(pageWithSidebar(
 <a href="https://steniofernandes.shinyapps.io/DDP_HistApp/">https://steniofernandes.shinyapps.io/DDP_HistApp/</a></li>
 </ol>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="class" id="id" style="background:;">
-  <article data-timings="">
-    
   </article>
   <!-- Presenter Notes -->
 </slide>
@@ -233,12 +232,6 @@ shinyUI(pageWithSidebar(
       <a href="#" target="_self" rel='tooltip' 
         data-slide=5 title='ShinyApps.io deployment'>
          5
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='NA'>
-         6
       </a>
     </li>
   </ul>
