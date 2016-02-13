@@ -98,8 +98,7 @@ shinyUI(pageWithSidebar(
   headerPanel(&quot;Best fit for a Normal Distribution&quot;),
   sidebarPanel(
     numericInput(&#39;meanvalue&#39;, &#39;Sample Mean&#39;, 0, min = -10, max = 10, step = 0.5),
-    numericInput(&#39;sdvalue&#39;, &#39;Sample Standard Deviation&#39;, 1, min = 0.5, max = 5, step = 0.5)
-              ),
+    numericInput(&#39;sdvalue&#39;, &#39;Sample Standard Deviation&#39;, 1, min = 0.5, max = 5, step = 0.5)),
   mainPanel(
     h3(&quot;This is a histogram of 5000 random samples from a Normal Distribution&quot;),
     h4(&quot;Your task is to guess its mean and standard deviation&quot;),
